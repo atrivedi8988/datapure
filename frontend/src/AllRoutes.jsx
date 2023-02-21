@@ -4,6 +4,7 @@ import Login from "./Components/Login";
 import PrivateRoute from "./Components/PrivateRoute";
 import Profile from "./Components/Profile";
 import Signup from "./Components/Signup";
+import UserList from "./Components/UserList";
 
 function AllRoutes() {
   return (
@@ -18,6 +19,7 @@ function AllRoutes() {
           </PrivateRoute>
         }
       />
+      <Route path="/userlist" element={<UserList/>}/>
     </Routes>
   );
 }

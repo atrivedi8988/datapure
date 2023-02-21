@@ -1,4 +1,5 @@
 import { Box, HStack, Text } from "@chakra-ui/react";
+import axios from "axios";
 import React from "react";
 import { Link, Navigate } from "react-router-dom";
 
@@ -16,9 +17,11 @@ function Navbar() {
       <Link to={"/signup"}>Sign up</Link>
       <Link to={"/"}>Login</Link>
       <Link to={"/profile"}>Profile</Link>
-      <Text onClick={()=>{
+      <Text _hover={{cursor:"pointer"}} onClick={()=>{
        localStorage.removeItem("token")
+       axios.defaults.headers.authorization = ""
       }}>Logout</Text>
+      <Link to="/userlist">User List</Link>
     </HStack>
   );
 }

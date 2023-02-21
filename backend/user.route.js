@@ -52,5 +52,27 @@ router.get("/allusers",isAuthenticate, isAuthorize, async(req,res)=>{
     })
 })
 
+// change user to admin and make a admin
+
+router.patch("/assignadmin/:id",isAuthenticate,isAuthorize,async(req,res)=>{
+    const {id} = req.params
+    let user = await User.findById(id)
+    if(!user){
+        return res.status(404).json({
+            success:false,
+            message:"User not found"
+        })
+    }
+    user = await User.findByIdAndUpdate(id,{role:req.body.role},{
+        new:true,
+        runValidators:true,
+    });
+    user.save({validateBeforeSave:true})
+    res.status(200).json({
+        success:true,
+        user
+    })
+})
+
 module.exports = router
 
