@@ -14,7 +14,9 @@ require("dotenv").config({ path: "./config.env" });
 
 // All routes 
 const userRoute = require("./user.route")
+const productRoute = require("./product.route")
 app.use("/",userRoute)
+app.use("/",productRoute)
 
 
 
