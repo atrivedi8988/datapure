@@ -22,6 +22,7 @@ function Navbar() {
        axios.defaults.headers.authorization = ""
       }}>Logout</Text>
       <Link to="/userlist">User List</Link>
+      <Link to="/products">Products</Link>
     </HStack>
   );
 }

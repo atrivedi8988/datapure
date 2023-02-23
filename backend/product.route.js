@@ -15,7 +15,6 @@ router.get("/allproducts", async (req, res) => {
 
 router.post("/product/filter", async (req, res) => {
   const filter = req.body;
-  console.log(filter);
   const product = await Product.aggregate([
     {
       $match: {
@@ -42,6 +41,8 @@ router.post("/product/filter", async (req, res) => {
 
   res.status(200).json({
     success: true,
+    totalItems : product.length,
+    totalPages : 2,
     product,
   });
 });
