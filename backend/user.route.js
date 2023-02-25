@@ -96,11 +96,15 @@ router.patch(
 
 // forgot password
 router.post("/forgot", async (req, res) => {
+  const message = 
+   "In the Below Reset password link"
+    `http://localhost:8080/reset/${req.params.id}`
+  
   try {
     const transporter = nodemailer.createTransport({
-      host: "smtp.ethereal.email",
-      port: 587,
-      secure: false,
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
       auth: {
         user: process.env.SMTP_EMAIL,
         pass: process.env.SMTP_PASS,
@@ -110,8 +114,8 @@ router.post("/forgot", async (req, res) => {
     const info = await transporter.sendMail({
       from: process.env.SMTP_EMAIL,
       to: req.body.email,
-      subject: "send temporary message",
-      text: req.body.message,
+      subject: "Reset Password Link",
+      text: message,
     });
 
     res.status(200).send(info);
