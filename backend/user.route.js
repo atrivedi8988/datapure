@@ -4,6 +4,7 @@ const User = require("./user.model");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const { thrownErrorMessage } = require("./responseMessage");
+const { sendEmail } = require("./Middlewares/sendEmail");
 
 const router = express.Router();
 
@@ -95,33 +96,41 @@ router.patch(
 );
 
 // forgot password
-router.post("/forgot", async (req, res) => {
-  const message = 
-   "In the Below Reset password link"
-    `http://localhost:8080/reset/${req.params.id}`
-  
-  try {
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.SMTP_EMAIL,
-        pass: process.env.SMTP_PASS,
-      },
-    });
-
-    const info = await transporter.sendMail({
-      from: process.env.SMTP_EMAIL,
-      to: req.body.email,
-      subject: "Reset Password Link",
-      text: message,
-    });
-
-    res.status(200).send(info);
-  } catch (err) {
-    res.status(500).send(err);
+router.post("/forgot", isAuthenticate, async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (user) {
+    const new_secret = user._id + email
+    const token = jwt.sign({id:user._id},new_secret,{expiresIn:"15minute"})
+    // const transporter = sendEmail;
+    const link = `http://localhost:8080/reset/${user._id}/${token}`;
+    console.log(token)
+    console.log(link)
+    // console.log(await transporter())
+    try {
+      const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.SMTP_EMAIL,
+          pass: process.env.SMTP_PASS,
+        },
+      });
+      const info = await transporter.sendMail({
+        from: process.env.SMTP_EMAIL,
+        to: email,
+        subject: "Password Reset",
+        html: `<a href=${link}>click here</a>, for reset your password`,
+      });
+      res.status(200).send(info)
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  } else {
+    return thrownErrorMessage(res, 404, "user is not found from this email");
   }
+
 });
 
 module.exports = router;
