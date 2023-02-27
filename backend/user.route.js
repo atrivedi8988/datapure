@@ -11,7 +11,7 @@ const router = express.Router();
 // create new account
 
 router.post("/create", async (req, res) => {
-  let user = await User.find({ email: req.body.email });
+  let user = await User.findOne({ email: req.body.email });
   if (user) {
     return thrownErrorMessage(
       res,
@@ -100,12 +100,15 @@ router.post("/forgot", isAuthenticate, async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
   if (user) {
-    const new_secret = user._id + email
-    const token = jwt.sign({id:user._id},new_secret,{expiresIn:"15minute"})
+    const new_secret = user._id + process.env.JWT_SECRET_KEY;
+    // console.log(new_secret.toString())
+    const token = jwt.sign({ id: user._id }, new_secret, {
+      expiresIn: "15minute",
+    });
     // const transporter = sendEmail;
     const link = `http://localhost:8080/reset/${user._id}/${token}`;
-    console.log(token)
-    console.log(link)
+    // console.log(token)
+    // console.log(link)
     // console.log(await transporter())
     try {
       const transporter = nodemailer.createTransport({
@@ -123,14 +126,42 @@ router.post("/forgot", isAuthenticate, async (req, res) => {
         subject: "Password Reset",
         html: `<a href=${link}>click here</a>, for reset your password`,
       });
-      res.status(200).send(info)
+      res.status(200).json({
+        success: true,
+        message: "Password Reset Email Sent... Please Check Your Email",
+      });
     } catch (err) {
       res.status(500).send(err);
     }
   } else {
     return thrownErrorMessage(res, 404, "user is not found from this email");
   }
+});
 
+router.patch("/reset/:id/:token", async (req, res) => {
+  const { id, token } = req.params;
+  if (token && id) {
+    const user = await User.findById(id);
+    const new_secret = user._id + process.env.JWT_SECRET_KEY;
+
+    // console.log(id, token);
+      // console.log(new_secret)
+      jwt.verify(token, new_secret,async(decode,err)=>{
+        if(err){
+          return res.status(500).send(err);
+        }
+        await User.findByIdAndUpdate(user._id, {
+          $set : req.body
+        });
+        user.save();
+        res.status(200).json({
+          success: true,
+        });
+      });
+      
+  } else {
+    return thrownErrorMessage(res, 400, "Invalid Link");
+  }
 });
 
 module.exports = router;
