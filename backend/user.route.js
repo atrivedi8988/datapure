@@ -96,17 +96,18 @@ router.patch(
 );
 
 // forgot password
-router.post("/forgot", isAuthenticate, async (req, res) => {
+router.post("/forgot", async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
   if (user) {
     const new_secret = user._id + process.env.JWT_SECRET_KEY;
+    // const new_secret = "jslkjosjlkskjfslkjs"
     // console.log(new_secret.toString())
     const token = jwt.sign({ id: user._id }, new_secret, {
-      expiresIn: "15minute",
+      expiresIn: "30s",
     });
     // const transporter = sendEmail;
-    const link = `http://localhost:8080/reset/${user._id}/${token}`;
+    const link = `http://localhost:3000/reset/${user._id}/${token}`;
     // console.log(token)
     // console.log(link)
     // console.log(await transporter())
@@ -146,7 +147,7 @@ router.patch("/reset/:id/:token", async (req, res) => {
 
     // console.log(id, token);
       // console.log(new_secret)
-      jwt.verify(token, new_secret,async(decode,err)=>{
+      jwt.verify(token, new_secret,async(err,decode)=>{
         if(err){
           return res.status(500).send(err);
         }
@@ -156,6 +157,7 @@ router.patch("/reset/:id/:token", async (req, res) => {
         user.save();
         res.status(200).json({
           success: true,
+          message : "Your password have changed successfully"
         });
       });
       

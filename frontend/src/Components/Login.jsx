@@ -24,7 +24,9 @@ function Login() {
   };
 
   const handleForgotPassword = ()=>{
-    
+    axios.post("http://localhost:8080/forgot", {email : formstate.email}).then((res)=>{
+      console.log(res)
+  })
   }
   return (
     <VStack
