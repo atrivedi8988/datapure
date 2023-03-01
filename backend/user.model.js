@@ -7,7 +7,9 @@ const  UserSchema = new mongoose.Schema({
     role:{
         type:String,
         default:"user"
-    }
+    },
+    resetPasswordToken : String,
+    resetPasswordTokenExpiry : Number
 })
 
 module.exports = mongoose.model("user",UserSchema)
