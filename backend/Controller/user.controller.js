@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const { thrownErrorMessage } = require("../Middlewares/responseMessage");
 const crypto = require("crypto");
+const { strongPassword } = require("../Middlewares/extrafunctionalityProblem");
 
 // Register New User
 
@@ -15,12 +16,25 @@ exports.registerUser = async (req, res) => {
       "User is already exist with this email id"
     );
   } else {
-    user = await User.create(req.body);
-    user.save();
-    res.status(201).json({
-      success: true,
-      user,
-    });
+    const { name, email, password, confirmPassword } = req.body;
+    if (strongPassword(password)===true) {
+      if (password === confirmPassword) {
+        user = await User.create({ name, email, password, confirmPassword });
+        user.save();
+        res.status(201).json({
+          success: true,
+          user,
+        });
+      } else {
+        return thrownErrorMessage(
+          res,
+          400,
+          "Password and Confirm Password does not match"
+        );
+      }
+    } else {
+      return thrownErrorMessage(res, 400, strongPassword(password));
+    }
   }
 };
 
