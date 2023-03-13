@@ -1,0 +1,41 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  background: #F5F5F5;
+}
+
+#welcome_products {
+  padding: 0px 100px 0px 100px;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Heading section */
+
+#heading {
+  display: flex;
+  align-items: center;
+}
+
+#heading h1 {
+  margin-left: 159px;
+  font-weight: 500;
+  font-size: 40px;
+  color: #3c3c3c;
+}
+
+#heading p {
+  margin-left: 234.64px;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+#heading > p > span {
+  color: green;
+}
+
+/* cards section */
+
+#card_section{
+
+}
