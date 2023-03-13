@@ -18,16 +18,21 @@
 }
 
 #heading h1 {
-  margin-left: 159px;
+  font-size: 64px;
   font-weight: 500;
-  font-size: 40px;
-  color: #3c3c3c;
+  line-height: 96px;
+  letter-spacing: 0em;
+  text-align: left;
+  margin-left: 159px;
 }
 
 #heading p {
-  margin-left: 234.64px;
+  font-size: 30px;
   font-weight: 500;
-  font-size: 15px;
+  line-height: 45px;
+  letter-spacing: 0em;
+  text-align: left;
+  margin-left: 234.64px;
 }
 
 #heading > p > span {
@@ -37,7 +42,12 @@
 /* cards section */
 
 #card_section {
+  margin-top: 103px;
   display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 67px;
+  margin-bottom: 130px;
 }
 
 .card {
@@ -50,16 +60,14 @@
   background-color: #ffffff;
 }
 
-
-
 .info_div p {
-    margin-top: 39.75px;
-    font-size: 22px;
-    font-weight: 300;
-    line-height: 33px;
-    letter-spacing: 0em;
-    text-align: left;
-    color: #5C5C5C;
+  margin-top: 39.75px;
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 33px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #5c5c5c;
 }
 
 .info_div h4 {
@@ -80,9 +88,77 @@
 }
 
 .star_img_div {
-    display: flex;
-    gap: 2px;
+  display: flex;
+  gap: 2px;
   height: 24.00645637512207px;
   width: 24.119434356689453px;
   border-radius: 0px;
+}
+
+
+
+@media screen and (max-width: 1933px) {
+    #card_section {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      #heading h1 {
+        font-size: 45px;
+      }
+      
+      #heading p {
+        font-size: 20px;
+      }
+      
+}
+
+@media screen and (max-width: 1465px) {
+    #welcome_products {
+        padding: 30px 50px 0px 50px;
+        font-family: "Poppins", sans-serif;
+      }
+    #card_section {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+}
+
+@media screen and (max-width: 480px) {
+    #welcome_products {
+        padding: 30px 50px 0px 50px;
+        font-family: "Poppins", sans-serif;
+      }
+
+      #heading{
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      #heading h1 {
+        margin-left: 0px;
+        line-height: normal;
+        font-size: large;
+        width: 100%;
+      }
+      
+      #heading p {
+        margin-left: 0px;
+        font-size: 12px;
+      }
+
+      #card_section {
+        grid-template-columns: repeat(1, 1fr);
+      }
+
+      .card {
+        width: 280px;
+        height: 550px;
+      }
+
+      .image_div>img{
+        width: 250px;
+        height: 280px;
+      }
+      
 }
